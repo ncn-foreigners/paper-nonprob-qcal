@@ -34,3 +34,7 @@ Structure of the repo:
 + `paper/` -- pdf file with the paper and source files
 
 ## Financing
+
+Work on this paper was supported by the National Science Centre, OPUS 22 grant no. 2020/39/B/HS4/00941.
+
+
