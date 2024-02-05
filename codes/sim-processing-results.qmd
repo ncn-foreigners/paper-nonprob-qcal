@@ -1,0 +1,284 @@
+---
+title: "Simulation - Kim and and Wang (2019) and Yang et al. (2021)"
+format: 
+  html:
+    self-contained: true
+    table-of-contents: true
+    number-sections: true
+    df-print: kable
+editor: source
+execute: 
+  eval: true
+  warning: false
+  message: false
+toc-title: Contents
+lang: en
+---
+
+# Libraries and functions
+
+Load libraries and functions 
+
+```{r}
+library(data.table)
+library(ggplot2)
+library(xtable)
+library(stringi)
+```
+
+# Read and process simulation results
+
+Reporting of results for the paper
+
+```{r}
+pop_true_vals <- structure(list(y = c("y11", "y12", "y21", "y22"), 
+                                true = c(3.02259676241112, 2.67916600636799, 0.89065, 0.75)), 
+                           class = "data.frame", 
+                           row.names = c(NA, -4L))
+```
+
+Load results
+
+```{r}
+results_df <- readRDS("../results/paper-nonrob-results-20k.rds")
+results_df <- results_df[c == 0]
+results_df[, est:=factor(est, c("naive",
+                                "cal0",
+                                "cal1a","cal1b","cal2a","cal2b",
+                                "ipw0",
+                                "ipw1a", "ipw1b","ipw2a", "ipw2b",
+                                "mi_nn",
+                                "mi_glm0", 
+                                "mi_glm1a", "mi_glm1b", "mi_glm2a", "mi_glm2b",
+                                "dr0",
+                                "dr1a", "dr1b","dr2a", "dr2b"))]
+results_df[, est2:=factor(est, c("naive", "cal0", "cal1a","cal1b","cal2a","cal2b", 
+                                "ipw0", "ipw1a", "ipw1b","ipw2a", "ipw2b", "mi_nn", 
+                                "mi_glm0", 
+                                "mi_glm1a", "mi_glm1b", "mi_glm2a", "mi_glm2b", 
+                                "dr0", "dr1a", "dr1b","dr2a", "dr2b"),
+                          c("Naive", "CAL0", "QCAL1A","QCAL1B","QCAL2A","QCAL2B", 
+                                "IPW0", "IPW1A", "IPW1B","IPW2A", "IPW2B", "NN", "GLM0", 
+                                "GLM1A", "GLM1B", "GLM2A", "GLM2B", "DR0", "DR1A", "DR1B","DR2A",
+                            "DR2B"))]
+
+results_df[, type := stri_extract(est, regex="naive|cal|ipw|mi|dr")]
+results_df[, type := factor(type, 
+                            c("naive", "cal", "ipw", "mi", "dr"),
+                            c("Naive", "CAL", "IPW", "MI", "DR"))]
+results_df[, est:=gsub("mi_", "", est)]
+results_df <- results_df[pop_true_vals, on = "y"]
+results_df <- results_df[, flag:= (lower_bound > 0 | is.na(lower_bound))]
+results_df <- results_df[flag == TRUE]
+#results_df <- results_df[r %in% sample(unique(results_df$r), 500)]
+
+```
+
+
+# Plots
+
+```{r}
+bd_lab <- c(
+  "1" = "Linear inclusion (BD1)",
+  "2" = "Non-linear inclusion (BD2)"
+)
+ys <- c(
+  y11 = "Linear model (OM1)",
+  y12 = "Non-linear model (OM2)",
+  y21 = "Logistic linear (OM3)",
+  y22 = "Logisitic non-linear (OM4)"
+)
+```
+
+Plots with results
+
+```{r}
+results_df |> 
+  subset(bd == 1 & y %in% c("y11", "y12")) |>
+  ggplot(data=_,aes(x = est2, y= mean)) +
+  geom_jitter(alpha = 0.1) + 
+  geom_violin(position = position_dodge(), draw_quantiles = c(0.25,0.5,0.75)) + 
+  stat_summary(fun = mean, geom = "point", color = "black")+ 
+  geom_hline(data=subset(pop_true_vals, y %in% c("y11", "y12")), 
+             aes(yintercept = true), linetype="dashed", color = "red") + 
+  facet_grid(y~type, scales = "free", labeller = labeller(y=ys, bd=bd_lab),
+             space='free_x') +
+  labs(x = "Estimator", y = "Estimations") + 
+  theme(axis.text.x = element_text(vjust = 1, hjust = 1, angle = 45))  -> p1a
+
+results_df |> 
+  subset(bd == 1 & y %in% c("y21", "y22")) |>
+  ggplot(data=_,aes(x = est2, y= mean)) +
+  geom_jitter(alpha = 0.1) + 
+  geom_violin(position = position_dodge(), draw_quantiles = c(0.25,0.5,0.75)) + 
+  stat_summary(fun = mean, geom = "point", color = "black")+ 
+  geom_hline(data=subset(pop_true_vals, y %in% c("y21", "y22")), 
+             aes(yintercept = true), linetype="dashed", color = "red") + 
+  
+  facet_grid(y~type, scales = "free", labeller = labeller(y=ys, bd=bd_lab),
+             space='free_x') +
+  labs(x = "Estimator", y = "Estimations") + 
+  theme(axis.text.x = element_text(vjust = 1, hjust = 1, angle = 45))  -> p1b
+
+results_df |> 
+  subset(bd == 2 & y %in% c("y11", "y12")) |>
+  ggplot(data=_,aes(x = est2, y= mean)) +
+  geom_jitter(alpha = 0.1) + 
+  geom_violin(position = position_dodge(), draw_quantiles = c(0.25,0.5,0.75)) + 
+  stat_summary(fun = mean, geom = "point", color = "black")+ 
+  geom_hline(data=subset(pop_true_vals, y %in% c("y11", "y12")), 
+             aes(yintercept = true), linetype="dashed", color = "red") + 
+  facet_grid(y~type, scales = "free", labeller = labeller(y=ys, bd=bd_lab),
+             space='free_x') +
+  labs(x = "Estimator", y = "Estimations") + 
+  theme(axis.text.x = element_text(vjust = 1, hjust = 1, angle = 45))  -> p2a
+
+results_df |> 
+  subset(bd == 2 & y %in% c("y21", "y22")) |>
+  ggplot(data=_,aes(x = est2, y= mean)) +
+  geom_jitter(alpha = 0.1) + 
+  geom_violin(position = position_dodge(), draw_quantiles = c(0.25,0.5,0.75)) + 
+  stat_summary(fun = mean, geom = "point", color = "black")+ 
+  geom_hline(data=subset(pop_true_vals, y %in% c("y21", "y22")), 
+             aes(yintercept = true), linetype="dashed", color = "red") + 
+  facet_grid(y~type, scales = "free", labeller = labeller(y=ys, bd=bd_lab),
+             space='free_x') +
+  labs(x = "Estimator", y = "Estimations") + 
+  theme(axis.text.x = element_text(vjust = 1, hjust = 1, angle = 45))  -> p2b
+
+
+ggsave(plot =p1a, filename = "../figs/sim-yang2021-mean-bd1-cont.png", width = 10, height = 6)
+ggsave(plot =p1b, filename = "../figs/sim-yang2021-mean-bd1-bin.png", width = 10, height = 6)
+ggsave(plot =p2a, filename = "../figs/sim-yang2021-mean-bd2-cont.png", width = 10, height = 6)
+ggsave(plot =p2b, filename = "../figs/sim-yang2021-mean-bd2-bin.png", width = 10, height = 6)
+```
+
+
+# Tables for the paper
+
+Table with results
+
+```{r}
+results_df[, .(m = mean(mean), v=var(mean), true = mean(true)), 
+           keyby=.(data=paste0("bd", bd), type, estimator=est, y)][
+  , bias:=m - true][
+    , true:=NULL][] |> 
+  melt(id.vars = c("data", "type", "estimator", "y")) |> 
+  subset(variable != "m") |> 
+  transform(y1 = substr(y, 1, 2),
+            y2 = substr(y, 3,3)) |> 
+  transform(variable = paste("var", y2, data, variable, sep = "_"),
+            type_m = NULL,
+            y = NULL,
+            y2 = NULL,
+            data = NULL) |> 
+  dcast(... ~ variable, value.var = "value") |> 
+  transform(estimator=factor(estimator, c("naive",
+                                "cal0", "cal1a","cal1b","cal2a","cal2b", 
+                                "ipw0",
+                                "ipw1a", "ipw1b","ipw2a", "ipw2b",
+                                "nn",
+                                "glm0", 
+                                "glm1a", "glm1b", "glm2a", "glm2b",
+                                "dr0",
+                                "dr1a", "dr1b","dr2a", "dr2b"),
+                             c("Naive", 
+                               "CAL0", "QCAL1A","QCAL1B","QCAL2A","QCAL2B", 
+                               "IPW0","IPW1A", "IPW1B", "IPW2A", "IPW2B",
+                               "NN",
+                               "GLM0", "GLM1A", "GLM1B", "GLM2A", "GLM2B",
+                               "DR0", "DR1A", "DR1B", "DR2A", "DR2B"))) |>
+  {\(x) x[y1 == "y1", .(estimator,
+              ll_bias=var_1_bd1_bias*100, ll_se=round(sqrt(var_1_bd1_v)*100,1), ll_rmse=round(sqrt(var_1_bd1_bias^2+var_1_bd1_v)*100,1),
+              ln_bias=var_1_bd2_bias*100, ln_se=round(sqrt(var_1_bd2_v)*100,1), ln_rmse=round(sqrt(var_1_bd2_bias^2+var_1_bd2_v)*100,1),
+              nl_bias=var_2_bd1_bias*100, nl_se=round(sqrt(var_2_bd1_v)*100,1), nl_rmse=round(sqrt(var_2_bd1_bias^2+var_2_bd1_v)*100,1),
+              nn_bias=var_2_bd2_bias*100, nn_se=round(sqrt(var_2_bd2_v)*100,1), nn_rmse=round(sqrt(var_2_bd2_bias^2+var_2_bd2_v)*100,1))]}() |> 
+  {\(x) x[order(estimator)]}() |> 
+  xtable(digits = 2) |> 
+  print.xtable(include.rownames = F)
+```
+
+
+```{r}
+results_df[, .(m = mean(mean), v=var(mean), true = mean(true)), 
+           keyby=.(data=paste0("bd", bd), type, estimator=est, y)][
+  , bias:=m - true][
+    , true:=NULL][] |> 
+  melt(id.vars = c("data", "type", "estimator", "y")) |> 
+  subset(variable != "m") |> 
+  transform(y1 = substr(y, 1, 2),
+            y2 = substr(y, 3,3)) |> 
+  transform(variable = paste("var", y2, data, variable, sep = "_"),
+            type_m = NULL,
+            y = NULL,
+            y2 = NULL,
+            data = NULL) |> 
+  dcast(... ~ variable, value.var = "value")  |> 
+  transform(estimator=factor(estimator, c("naive",
+                                          "cal0", "cal1a","cal1b","cal2a","cal2b", 
+                                "ipw0",
+                                "ipw1a", "ipw1b","ipw2a", "ipw2b",
+                                "nn",
+                                "glm0", 
+                                "glm1a", "glm1b", "glm2a", "glm2b",
+                                "dr0",
+                                "dr1a", "dr1b","dr2a", "dr2b"),
+                             c("Naive", 
+                               "CAL0", "QCAL1A","QCAL1B","QCAL2A","QCAL2B", 
+                               "IPW0","IPW1A", "IPW1B", "IPW2A", "IPW2B",
+                               "NN",
+                               "GLM0", "GLM1A", "GLM1B", "GLM2A", "GLM2B",
+                               "DR0", "DR1A", "DR1B", "DR2A", "DR2B"))) |>
+  {\(x) x[y1 == "y2", .(estimator, 
+              ll_bias=var_1_bd1_bias*100, ll_se=sqrt(var_1_bd1_v)*100, ll_rmse=sqrt(var_1_bd1_bias^2+var_1_bd1_v)*100,
+              ln_bias=var_1_bd2_bias*100, ln_se=sqrt(var_1_bd2_v)*100, ln_rmse=sqrt(var_1_bd2_bias^2+var_1_bd2_v)*100,
+              nl_bias=var_2_bd1_bias*100, nl_se=sqrt(var_2_bd1_v)*100, nl_rmse=sqrt(var_2_bd1_bias^2+var_2_bd1_v)*100,
+              nn_bias=var_2_bd2_bias*100, nn_se=sqrt(var_2_bd2_v)*100, nn_rmse=sqrt(var_2_bd2_bias^2+var_2_bd2_v)*100)]}() |> 
+  {\(x) x[order(estimator)]}() |> 
+  xtable(digits = 2) |> 
+  print.xtable(include.rownames = F)
+```
+
+Coverage and length
+
+```{r}
+results_df[, inside := between(true, lower_bound, upper_bound, incbounds = F)]
+
+results_df[!grepl("naive|cal", est), .(ci = mean(inside), len = mean(upper_bound - lower_bound)), 
+           keyby=.(data=paste0("bd", bd), type, estimator=est, y)] |> 
+  melt(id.vars = c("data", "type", "estimator", "y")) |> 
+  transform(y1 = substr(y, 1, 2),
+            y2 = substr(y, 3,3)) |> 
+  transform(variable = paste("var", y2, data, variable, sep = "_"),
+            type_m = NULL,
+            y = NULL,
+            y2 = NULL,
+            data = NULL) |> 
+  dcast(... ~ variable, value.var = "value")  |> 
+  transform(estimator=factor(estimator, c("naive", 
+                                          "ipw0",
+                                          "ipw1a", "ipw1b", "ipw2a", "ipw2b",
+                                          "nn",
+                                          "glm0",
+                                          "glm1a", "glm1b", "glm2a", "glm2b",
+                                          "dr0",
+                                          "dr1a", "dr1b", "dr2a", "dr2b"),
+                             c("Naive", 
+                                          "IPW0",
+                                          "IPW1A", "IPW1B", "IPW2A", "IPW2B",
+                                          "NN",
+                                          "GLM0",
+                                          "GLM1A", "GLM1B", "GLM2A", "GLM2B",
+                                          "DR0",
+                                          "DR1A", "DR1B", "DR2A", "DR2B"))) |>
+  {\(x) x[order(y1, estimator)]}() |> 
+  {\(x) x[, .(estimator, 
+              ll_ci=var_1_bd1_ci*100, ll_len=var_1_bd1_len*100,
+              ln_ci=var_1_bd2_ci*100, ln_len=var_1_bd2_len*100,
+              nl_ci=var_2_bd1_ci*100, nl_len=var_2_bd1_len*100,
+              nn_ci=var_2_bd2_ci*100, nn_len=var_2_bd2_len*100)]}() |> 
+  xtable(digits = 2) |> 
+  print.xtable(include.rownames = F)
+
+```
+
