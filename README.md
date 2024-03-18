@@ -2,6 +2,8 @@
 
 ## Working paper
 
+[Arxiv version](https://arxiv.org/abs/2403.09726)
+
 [Here](paper/beresewicz-szymkowiak-nonprob-qcal.pdf) is the lastest version of the paper.
 
 ## Requirements
