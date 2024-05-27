@@ -10,7 +10,7 @@ library(foreach)
 library(ggplot2)
 
 source("codes/sim-code-yang-2020.R")
-save_file <- "results/paper-nonrob-results-20k.rds"
+save_file <- "results/paper-nonrob-results-20k-revised.rds"
 
 seed_number <- 2023-12-10
 set.seed(seed_number)
@@ -61,7 +61,7 @@ formula_y22_p2a <- as.formula(paste("y22", paste(as.character(formula_xs_p2a), c
 formula_y22_p2b <- as.formula(paste("y22", paste(as.character(formula_xs_p2b), collapse ="")))
 
 a <- Sys.time()
-sims <- 500 
+sims <- 600
 cores <- 8
 cl <- makeCluster(cores)
 registerDoSNOW(cl)
@@ -72,7 +72,8 @@ opts <- list(progress = \(n) pb$tick())
 results_simulation1 <- foreach(k=1:sims, 
                                .combine = rbind,
                                .packages = c("survey", "nonprobsvy", "jointCalib", "sampling", "data.table"),
-                               .options.snow = opts) %dopar% {
+                               .options.snow = opts,
+                               .errorhandling = "remove") %dopar% {
                         yang_sim(k)                              
 }
 stopCluster(cl)

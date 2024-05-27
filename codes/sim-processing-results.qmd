@@ -40,27 +40,29 @@ pop_true_vals <- structure(list(y = c("y11", "y12", "y21", "y22"),
 Load results
 
 ```{r}
-results_df <- readRDS("../results/paper-nonrob-results-20k.rds")
+results_df <- readRDS("../results/paper-nonrob-results-20k-revised.rds")
 results_df <- results_df[c == 0]
+results_df <- results_df[k %in% unique(results_df$k)[1:100]]
 results_df[, est:=factor(est, c("naive",
-                                "cal0",
-                                "cal1a","cal1b","cal2a","cal2b",
+                                "ipwst0",
+                                "ipwst1a", "ipwst1b","ipwst2a", "ipwst2b",
                                 "ipw0",
                                 "ipw1a", "ipw1b","ipw2a", "ipw2b",
                                 "mi_nn",
                                 "mi_glm0", 
-                                "mi_glm1a", "mi_glm1b", "mi_glm2a", "mi_glm2b",
-                                "dr0",
-                                "dr1a", "dr1b","dr2a", "dr2b"))]
-results_df[, est2:=factor(est, c("naive", "cal0", "cal1a","cal1b","cal2a","cal2b", 
-                                "ipw0", "ipw1a", "ipw1b","ipw2a", "ipw2b", "mi_nn", 
+                                "drst0",
+                                "dr0"))]
+results_df[, est2:=factor(est, c("naive", 
+                                "ipwst0", "ipwst1a", "ipwst1b","ipwst2a", "ipwst2b", 
+                                "ipw0", "ipw1a", "ipw1b","ipw2a", "ipw2b", 
+                                "mi_nn", 
                                 "mi_glm0", 
-                                "mi_glm1a", "mi_glm1b", "mi_glm2a", "mi_glm2b", 
-                                "dr0", "dr1a", "dr1b","dr2a", "dr2b"),
-                          c("Naive", "CAL0", "QCAL1A","QCAL1B","QCAL2A","QCAL2B", 
-                                "IPW0", "IPW1A", "IPW1B","IPW2A", "IPW2B", "NN", "GLM0", 
-                                "GLM1A", "GLM1B", "GLM2A", "GLM2B", "DR0", "DR1A", "DR1B","DR2A",
-                            "DR2B"))]
+                                "drst0", "dr0"),
+                          c("Naive", 
+                            "IPW0-st", "IPW1A-st", "IPW1B-st","IPW2A-st", "IPW2B-st", 
+                            "IPW0", "IPW1A", "IPW1B","IPW2A", "IPW2B", 
+                            "NN", "GLM", 
+                            "DR-st", "DR"))]
 
 results_df[, type := stri_extract(est, regex="naive|cal|ipw|mi|dr")]
 results_df[, type := factor(type, 
@@ -173,21 +175,17 @@ results_df[, .(m = mean(mean), v=var(mean), true = mean(true)),
             y2 = NULL,
             data = NULL) |> 
   dcast(... ~ variable, value.var = "value") |> 
-  transform(estimator=factor(estimator, c("naive",
-                                "cal0", "cal1a","cal1b","cal2a","cal2b", 
-                                "ipw0",
-                                "ipw1a", "ipw1b","ipw2a", "ipw2b",
-                                "nn",
+  transform(estimator2=factor(estimator, c("naive", 
+                                "ipwst0", "ipwst1a", "ipwst1b","ipwst2a", "ipwst2b", 
+                                "ipw0", "ipw1a", "ipw1b","ipw2a", "ipw2b", 
+                                "nn", 
                                 "glm0", 
-                                "glm1a", "glm1b", "glm2a", "glm2b",
-                                "dr0",
-                                "dr1a", "dr1b","dr2a", "dr2b"),
-                             c("Naive", 
-                               "CAL0", "QCAL1A","QCAL1B","QCAL2A","QCAL2B", 
-                               "IPW0","IPW1A", "IPW1B", "IPW2A", "IPW2B",
-                               "NN",
-                               "GLM0", "GLM1A", "GLM1B", "GLM2A", "GLM2B",
-                               "DR0", "DR1A", "DR1B", "DR2A", "DR2B"))) |>
+                                "drst0", "dr0"),
+                          c("Naive", 
+                            "IPW0-st", "IPW1A-st", "IPW1B-st","IPW2A-st", "IPW2B-st", 
+                            "IPW0", "IPW1A", "IPW1B","IPW2A", "IPW2B", 
+                            "NN", "GLM", 
+                            "DR-st", "DR"))) |>
   {\(x) x[y1 == "y1", .(estimator,
               ll_bias=var_1_bd1_bias*100, ll_se=round(sqrt(var_1_bd1_v)*100,1), ll_rmse=round(sqrt(var_1_bd1_bias^2+var_1_bd1_v)*100,1),
               ln_bias=var_1_bd2_bias*100, ln_se=round(sqrt(var_1_bd2_v)*100,1), ln_rmse=round(sqrt(var_1_bd2_bias^2+var_1_bd2_v)*100,1),
@@ -214,21 +212,17 @@ results_df[, .(m = mean(mean), v=var(mean), true = mean(true)),
             y2 = NULL,
             data = NULL) |> 
   dcast(... ~ variable, value.var = "value")  |> 
-  transform(estimator=factor(estimator, c("naive",
-                                          "cal0", "cal1a","cal1b","cal2a","cal2b", 
-                                "ipw0",
-                                "ipw1a", "ipw1b","ipw2a", "ipw2b",
-                                "nn",
+  transform(estimator=factor(estimator, c("naive", 
+                                "ipwst0", "ipwst1a", "ipwst1b","ipwst2a", "ipwst2b", 
+                                "ipw0", "ipw1a", "ipw1b","ipw2a", "ipw2b", 
+                                "nn", 
                                 "glm0", 
-                                "glm1a", "glm1b", "glm2a", "glm2b",
-                                "dr0",
-                                "dr1a", "dr1b","dr2a", "dr2b"),
-                             c("Naive", 
-                               "CAL0", "QCAL1A","QCAL1B","QCAL2A","QCAL2B", 
-                               "IPW0","IPW1A", "IPW1B", "IPW2A", "IPW2B",
-                               "NN",
-                               "GLM0", "GLM1A", "GLM1B", "GLM2A", "GLM2B",
-                               "DR0", "DR1A", "DR1B", "DR2A", "DR2B"))) |>
+                                "drst0", "dr0"),
+                          c("Naive", 
+                            "IPW0-st", "IPW1A-st", "IPW1B-st","IPW2A-st", "IPW2B-st", 
+                            "IPW0", "IPW1A", "IPW1B","IPW2A", "IPW2B", 
+                            "NN", "GLM", 
+                            "DR-st", "DR"))) |>
   {\(x) x[y1 == "y2", .(estimator, 
               ll_bias=var_1_bd1_bias*100, ll_se=sqrt(var_1_bd1_v)*100, ll_rmse=sqrt(var_1_bd1_bias^2+var_1_bd1_v)*100,
               ln_bias=var_1_bd2_bias*100, ln_se=sqrt(var_1_bd2_v)*100, ln_rmse=sqrt(var_1_bd2_bias^2+var_1_bd2_v)*100,
