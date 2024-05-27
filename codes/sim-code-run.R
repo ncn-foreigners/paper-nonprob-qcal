@@ -10,11 +10,13 @@ library(foreach)
 library(ggplot2)
 
 source("codes/sim-code-yang-2020.R")
-save_file <- "results/paper-nonrob-results-20k-revised.rds"
+#save_file <- "results/paper-nonrob-results-20k-revised.rds"
+#save_file <- "results/paper-nonrob-results-50k-revised.rds"
+save_file <- "results/paper-nonrob-results-100k-revised.rds"
 
 seed_number <- 2023-12-10
 set.seed(seed_number)
-N <- 20000
+N <- 100000
 n <- 1000
 x1 <- rnorm(N,1,1)
 x2 <- rexp(N,1)
