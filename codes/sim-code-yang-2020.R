@@ -184,7 +184,7 @@ yang_sim <- function(k) {
                     method_outcome = "nn", se = TRUE)
   
   ## mass imputation (glm)
-  bd1_mi_c_glm <- nonprob(outcome = y11 + y21 ~ x1 + x2, svydesign = sample_prob_svy, data = sample_bd1, 
+  bd1_mi_c_glm <- nonprob(outcome = y11 + y12 ~ x1 + x2, svydesign = sample_prob_svy, data = sample_bd1, 
                             method_outcome = "glm", se = TRUE)
   bd1_mi_b_glm <- nonprob(outcome = y21 + y22 ~ x1 + x2, svydesign = sample_prob_svy, data = sample_bd1, 
                             method_outcome = "glm", family_outcome = "binomial", se = TRUE)
@@ -350,7 +350,7 @@ yang_sim <- function(k) {
                     method_outcome = "nn", se = TRUE)
   
   ## mass imputation (glm)
-  bd2_mi_c_glm <- nonprob(outcome = y11 + y21 ~ x1 + x2, svydesign = sample_prob_svy, data = sample_bd2, 
+  bd2_mi_c_glm <- nonprob(outcome = y11 + y12 ~ x1 + x2, svydesign = sample_prob_svy, data = sample_bd2, 
                           method_outcome = "glm", se = TRUE)
   bd2_mi_b_glm <- nonprob(outcome = y21 + y22 ~ x1 + x2, svydesign = sample_prob_svy, data = sample_bd2, 
                           method_outcome = "glm", family_outcome = "binomial", se = TRUE)
