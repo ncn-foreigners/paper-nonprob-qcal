@@ -11,9 +11,8 @@
 R packages
 
 ``` r
-install.packages("remotes") ## to install `nonprobsvy`
-remotes::install_github("ncn-foreigners/nonprobsvy@gee_momentfit") ## not from the main or dev brach
-install.packages(c("jointCalib", "sampling", "survey", "data.table", "ggplot2")) ## statistical
+install.packages("nonprobsvy")
+install.packages(c("jointCalib", "sampling", "laeken", "survey", "data.table", "ggplot2")) ## statistical
 install.packages(c("data.table", "ggplot2", "xtable", "stringi")) ## processing
 install.packages(c("doSNOW", "progress", "foreach")) ## paralell computing
 ```
@@ -41,4 +40,4 @@ Structure of the repo:
 
 ## Financing
 
-Work on this paper was supported by the National Science Centre, OPUS 22 grant no. 2020/39/B/HS4/00941.
+Work on this paper was supported by the National Science Centre, OPUS 20 grant no. 2020/39/B/HS4/00941.

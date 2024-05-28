@@ -7,12 +7,13 @@ library(jointCalib)
 library(doSNOW)
 library(progress)
 library(foreach)
+library(laeken)
 library(ggplot2)
 
 source("codes/sim-code-yang-2020.R")
-#save_file <- "results/paper-nonrob-results-20k-revised.rds"
-#save_file <- "results/paper-nonrob-results-50k-revised.rds"
-save_file <- "results/paper-nonrob-results-100k-revised.rds"
+#save_file <- "results/paper-nonrob-results-20k-revised.rds" ## 25 min 
+#save_file <- "results/paper-nonrob-results-50k-revised.rds" ## 60 min
+save_file <- "results/paper-nonrob-results-100k-revised.rds" ## 2h
 
 seed_number <- 2023-12-10
 set.seed(seed_number)
@@ -73,9 +74,10 @@ opts <- list(progress = \(n) pb$tick())
 
 results_simulation1 <- foreach(k=1:sims, 
                                .combine = rbind,
-                               .packages = c("survey", "nonprobsvy", "jointCalib", "sampling", "data.table"),
+                               .packages = c("survey", "nonprobsvy", "jointCalib", "sampling", "data.table", "laeken"),
                                .options.snow = opts,
-                               .errorhandling = "remove") %dopar% {
+                               .errorhandling = "remove"
+                               ) %dopar% {
                         yang_sim(k)                              
 }
 stopCluster(cl)
