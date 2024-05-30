@@ -95,7 +95,7 @@ saveRDS(results_simulation1, save_file)
 
 # 50k ---------------------------------------------------------------------
 
-save_file <- "results/paper-nonrob-results-50k-revised.rds" ## 25 min 
+save_file <- "results/paper-nonrob-results-50k-revised.rds" ## 1h
 seed_number <- 2023-12-10
 set.seed(seed_number)
 N <- 50000
@@ -176,10 +176,10 @@ saveRDS(results_simulation1, save_file)
 
 # 100k --------------------------------------------------------------------
 
-save_file <- "results/paper-nonrob-results-100k-revised.rds" ## 25 min 
+save_file <- "results/paper-nonrob-results-100k-revised.rds" ## 2h
 seed_number <- 2023-12-10
 set.seed(seed_number)
-N <- 50000
+N <- 100000
 n <- 1000
 x1 <- rnorm(N,1,1)
 x2 <- rexp(N,1)

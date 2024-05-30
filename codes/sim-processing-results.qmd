@@ -276,3 +276,25 @@ results_df[!grepl("naive|cal", est), .(ci = mean(inside), len = mean(upper_bound
 ```
 Information on the reproduction of totals and quantiles
 
+```{r}
+results_df[!is.na(alphas), .(est2, N = sqrt((N-100000)^2), taus, alphas, bd, k)] |>
+  unique() |>
+  {\(x) x[, .(N_m = mean(N), taus_m = mean(taus), quant = mean(alphas)), .(bd, est2)]}() |>
+  melt(id.vars = c("bd", "est2"))  |>
+  transform(variable = paste(bd, variable, sep = "_"),
+            bd = NULL) |>
+  dcast(est2 ~ variable, value.var = "value") |>
+  xtable(digits = 2) |>
+  print.xtable(include.rownames = F)
+
+results_df[!is.na(alphas), .(est2, N = sqrt((N-100000)^2), taus, alphas, bd, k)] |>
+  unique() |>
+  {\(x) x[, .(N_m = median(N), taus_m = median(taus), quant = median(alphas)), .(bd, est2)]}() |>
+  melt(id.vars = c("bd", "est2"))  |>
+  transform(variable = paste(bd, variable, sep = "_"),
+            bd = NULL) |>
+  dcast(est2 ~ variable, value.var = "value") |>
+  xtable(digits = 2) |>
+  print.xtable(include.rownames = F)
+```
+

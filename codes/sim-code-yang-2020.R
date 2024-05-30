@@ -41,6 +41,12 @@ yang_sim <- function(k) {
   sample_bd1 <- pop_data[rbinom(N,1,pop_data$p1)==1, ]
   sample_bd2 <- pop_data[rbinom(N,1,pop_data$p2)==1, ]
   
+  ## naive quantiles
+  q_bd1 <- c(quantile(sample_bd1$x1, p_comp_quants), quantile(sample_bd1$x2, p_comp_quants))
+  q_bd2 <- c(quantile(sample_bd2$x1, p_comp_quants), quantile(sample_bd2$x1, p_comp_quants))
+  q_bd1_diff <- sum((q_bd1-p_comp)^2)
+  q_bd2_diff <- sum((q_bd2-p_comp)^2)
+  
   ##########################################
   # linear inclusion --------------------------------------------------------
   ##########################################
@@ -393,7 +399,7 @@ yang_sim <- function(k) {
     rbind(
       data.frame(mean = unlist(sample_bd1[, lapply(.SD, mean), .SDcols = patterns("y")]), 
                  SE=NA, lower_bound=NA, upper_bound = NA, 
-                 N = NA, taus = NA, alphas = NA),
+                 N = NA, taus = NA, alphas = q_bd1_diff),
       
       cbind(bd1_ipw_standard_0$output,       bd1_ipw_standard_0$confidence_interval,  N=bd1_ipw_standard_n[1], taus = bd1_ipw_standard_tau[1], alphas = bd1_ipw_standard_alphas[1]),
       cbind(bd1_ipw_standard_1a$output,      bd1_ipw_standard_1a$confidence_interval, N=bd1_ipw_standard_n[2], taus = bd1_ipw_standard_tau[2], alphas = bd1_ipw_standard_alphas[2]),
@@ -408,8 +414,8 @@ yang_sim <- function(k) {
       cbind(bd1_ipw_2b$output,      bd1_ipw_2b$confidence_interval,N=bd1_ipw_n[5], taus = bd1_ipw_tau[5], alphas = bd1_ipw_alphas[5]),
       
       cbind(bd1_mi$output,     bd1_mi$confidence_interval,N = NA, taus = NA, alphas = NA),
-      cbind(bd1_mi_c_glm$output, bd1_mi_c_glm$confidence_interval,N = NA, taus = NA, alphas = NA),
-      cbind(bd1_mi_b_glm$output, bd1_mi_b_glm$confidence_interval,N = NA, taus = NA, alphas = NA),
+      cbind(bd1_mi_c_glm$output, bd1_mi_c_glm$confidence_interval, N = NA, taus = NA, alphas = NA),
+      cbind(bd1_mi_b_glm$output, bd1_mi_b_glm$confidence_interval, N = NA, taus = NA, alphas = NA),
       
       cbind(bd1_dr_c_standard_0$output, bd1_dr_c_standard_0$confidence_interval,N = NA, taus = NA, alphas = NA),
       cbind(bd1_dr_b_standard_0$output, bd1_dr_b_standard_0$confidence_interval,N = NA, taus = NA, alphas = NA),
@@ -433,9 +439,9 @@ yang_sim <- function(k) {
     rep("dr", 4)),
     y = rep(c("y11", "y12", "y21", "y22"), times = 15),
     rbind(
-      data.frame(mean = unlist(sample_bd1[, lapply(.SD, mean), .SDcols = patterns("y")]), 
+      data.frame(mean = unlist(sample_bd2[, lapply(.SD, mean), .SDcols = patterns("y")]), 
                  SE=NA, lower_bound=NA, upper_bound = NA,
-                 N = NA, taus = NA, alphas = NA),
+                 N = NA, taus = NA, alphas = q_bd2_diff),
       
       cbind(bd2_ipw_standard_0$output,       bd2_ipw_standard_0$confidence_interval, N=bd2_ipw_standard_n[1], taus = bd2_ipw_standard_tau[1], alphas = bd2_ipw_standard_alphas[1]),
       cbind(bd2_ipw_standard_1a$output,      bd2_ipw_standard_1a$confidence_interval,N=bd2_ipw_standard_n[2], taus = bd2_ipw_standard_tau[2], alphas = bd2_ipw_standard_alphas[2]),
