@@ -1,10 +1,10 @@
-# Repository for the paper "Inference for non-probability samples using the calibration approach for quantiles"
+# Repository for the paper "Quantile balancing inverse probability weighting for non-probability samples"
 
 ## Working paper
 
 [Arxiv version](https://arxiv.org/abs/2403.09726)
 
-[Here](paper/beresewicz-szymkowiak-nonprob-qcal.pdf) is the lastest version of the paper.
+[Here](paper/paper-nonprob-qcal.pdf) is the lastest version of the paper.
 
 ## Requirements
 
