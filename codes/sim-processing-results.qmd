@@ -77,7 +77,7 @@ results_df <- results_df[pop_true_vals, on = "y"]
 results_df <- results_df[, flag:= (lower_bound > 0 | is.na(lower_bound))]
 results_df <- results_df[flag == TRUE]
 #results_df <- results_df[r %in% sample(unique(results_df$r), 500)]
-
+results_df <- subset(results_df, !grepl("a$", est)) ## remove as suggested by reviewers
 ```
 
 
@@ -162,7 +162,7 @@ ggsave(plot =p2b, filename = "../figs/sim-yang2021-mean-bd2-bin.png", width = 10
 
 # Tables for the paper
 
-Table with results
+Table 5.2 -- Results for continuous and binary Y (B, SE and RMSE are multiplied by 100)
 
 ```{r}
 results_df[, .(m = mean(mean), v=var(mean), true = mean(true)), 
@@ -200,6 +200,7 @@ results_df[, .(m = mean(mean), v=var(mean), true = mean(true)),
   print.xtable(include.rownames = F)
 ```
 
+Table 5.2 -- Results for continuous and binary Y (B, SE and RMSE are multiplied by 100)
 
 ```{r}
 results_df[, .(m = mean(mean), v=var(mean), true = mean(true)), 
@@ -237,6 +238,7 @@ results_df[, .(m = mean(mean), v=var(mean), true = mean(true)),
   print.xtable(include.rownames = F)
 ```
 
+Table 5.3 -- Empirical coverage rate and average length of confidence interval based on analytical variance estimator
 Coverage and length
 
 ```{r}
@@ -274,7 +276,8 @@ results_df[!grepl("naive|cal", est), .(ci = mean(inside), len = mean(upper_bound
   print.xtable(include.rownames = F)
 
 ```
-Information on the reproduction of totals and quantiles
+
+Information on the reproduction of totals and quantiles (appendix Table B1. Quality of reproduced population size, totals and quantiles)
 
 ```{r}
 results_df[!is.na(alphas), .(est2, N = sqrt((N-100000)^2), taus, alphas, bd, k)] |>

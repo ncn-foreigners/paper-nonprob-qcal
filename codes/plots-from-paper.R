@@ -33,20 +33,23 @@ rsquares <- sapply(list(m1,m2a,m2b,m3a,m3b), function(x) round(summary(x)$r.squa
 rsquares
 
 cairo_pdf(file = "figs/fig1-example1.pdf", width = 13, height =5)
-par(mfrow=c(1,5))
-with(df, plot(x, y, main = TeX(r"($E(y_k|x_k^*)$,$R^2 \approx 0\%$)"), xlab = "X", ylab = "Y1"))
+par(mfrow=c(1,3))
+with(df, plot(x, y, main = TeX(r"($E(y_k|x_k)$,$R^2 \approx 0\%$)"), xlab = "X", ylab = "Y1", cex.main = 1.5))
 with(df, points(x, fitted(m1), col = "red"))
 
-with(df, plot(x, y, main = TeX(r"($E(y_k|x_k^\circ)$,$R^2 \approx 49\%$)"), xlab = "X (quartiles used)", ylab = ""))
-with(df, points(x, fitted(m2a), col = "red"))
+#with(df, plot(x, y, main = TeX(r"($E(y_k|x_k)$,$R^2 \approx 49\%$)"), xlab = "X (quartiles used)", ylab = ""))
+#with(df, points(x, fitted(m2a), col = "red"))
 
-with(df, plot(x, y, main = TeX(r"($E(y_k|x_k^\circ, x_k^*)$,$R^2 \approx 49\%$)"), xlab = "X (quartiles used)", ylab = ""))
+with(df, plot(x, y, 
+              main = TeX(r"($E(y_k|x_k, a_k)$,$R^2 \approx 49\%$)"), xlab = "X (quartiles used)", ylab = "", 
+              cex.main = 1.5))
 with(df, points(x, fitted(m2b), col = "red"))
 
-with(df, plot(x, y, main = TeX(r"($E(y_k|x_k^*)$,$R^2 \approx 68\%$)"), xlab = "X (deciles used)", ylab = ""))
-with(df, points(x, fitted(m3a), col = "red"))
+#with(df, plot(x, y, main = TeX(r"($E(y_k|x_k)$,$R^2 \approx 68\%$)"), xlab = "X (deciles used)", ylab = ""))
+#with(df, points(x, fitted(m3a), col = "red"))
 
-with(df, plot(x, y, main = TeX(r"($E(y_k|x_k^\circ, x_k^*)$,$R^2 \approx 68\%$)"), xlab = "X (deciles used)", ylab = ""))
+with(df, plot(x, y, main = TeX(r"($E(y_k|x_k, a_k)$,$R^2 \approx 68\%$)"), xlab = "X (deciles used)", 
+              ylab = "", cex.main = 1.5))
 with(df, points(x, fitted(m3b), col = "red"))
 
 dev.off()
@@ -80,37 +83,37 @@ m3b <- glm(y ~ x + x_p01 + x_p02 + x_p03 + x_p04 + x_p05 + x_p06 + x_p07 + x_p08
 
 
 cairo_pdf(file = "figs/fig1-example2.pdf", width = 13, height =5)
-par(mfrow=c(1,5))
-with(df, plot(x, p2, main = TeX(r"($P(y_k|x_k^*)$)"), xlab = "X", ylab = "P(Y2=1|X)"))
+par(mfrow=c(1,3))
+with(df, plot(x, p2, main = TeX(r"($P(y_k|x_k)$)"), xlab = "X", ylab = "P(Y2=1|X)", cex.main = 1.5))
 with(df, points(x, fitted(m1), col = "red"))
 
-with(df, plot(x, p2, main = TeX(r"($P(y_k|x_k^\circ)$)"), xlab = "X (quartiles used)", ylab = ""))
-with(df, points(x, fitted(m2a), col = "red"))
+#with(df, plot(x, p2, main = TeX(r"($P(y_k|x_k)$)"), xlab = "X (quartiles used)", ylab = ""))
+#with(df, points(x, fitted(m2a), col = "red"))
 
-with(df, plot(x, p2, main = TeX(r"($P(y_k|x_k^\circ, x_k^*)$)"), xlab = "X (quartiles used)", ylab = ""))
+with(df, plot(x, p2, main = TeX(r"($P(y_k|x_k, a_k)$)"), xlab = "X (quartiles used)", ylab = "", cex.main = 1.5))
 with(df, points(x, fitted(m2b), col = "red"))
 
-with(df, plot(x, p2, main = TeX(r"($P(y_k|x_k^*)$)"), xlab = "X (deciles used)", ylab = ""))
-with(df, points(x, fitted(m3a), col = "red"))
+#with(df, plot(x, p2, main = TeX(r"($P(y_k|x_k)$)"), xlab = "X (deciles used)", ylab = ""))
+#with(df, points(x, fitted(m3a), col = "red"))
 
-with(df, plot(x, p2, main = TeX(r"($P(y_k|x_k^\circ, x_k^*)$)"), xlab = "X (deciles used)", ylab = ""))
+with(df, plot(x, p2, main = TeX(r"($P(y_k|x_k, a_k)$)"), xlab = "X (deciles used)", ylab = "", cex.main = 1.5))
 with(df, points(x, fitted(m3b), col = "red"))
 dev.off()
 
-cairo_pdf(file = "figs/fig1-example2a.pdf", width = 10)
-par(mfrow=c(2,3))
-with(df, plot(x, 1/p2, main = TeX(r"($P(y_k|x_k^*)$)"), xlab = "X", ylab = "Y"))
-with(df, points(x, 1/fitted(m1), col = "red"))
-
-with(df, plot(x, 1/p2, main = TeX(r"($P(y_k|x_k^\circ)$)"), xlab = "X", ylab = "Y"))
-with(df, points(x, 1/fitted(m2a), col = "red"))
-
-with(df, plot(x, 1/p2, main = TeX(r"($P(y_k|x_k^\circ, x_k^*)$)"), xlab = "X", ylab = "Y"))
-with(df, points(x, 1/fitted(m2b), col = "red"))
-
-with(df, plot(x, 1/p2, main = TeX(r"($P(y_k|x_k^*)$)"), xlab = "X", ylab = "Y"))
-with(df, points(x, 1/fitted(m3a), col = "red"))
-
-with(df, plot(x, 1/p2, main = TeX(r"($P(y_k|x_k^\circ, x_k^*)$)"), xlab = "X", ylab = "Y"))
-with(df, points(x, 1/fitted(m3b), col = "red"))
-dev.off()
+# cairo_pdf(file = "figs/fig1-example2a.pdf", width = 10)
+# par(mfrow=c(2,3))
+# with(df, plot(x, 1/p2, main = TeX(r"($P(y_k|x_k)$)"), xlab = "X", ylab = "Y"))
+# with(df, points(x, 1/fitted(m1), col = "red"))
+# 
+# with(df, plot(x, 1/p2, main = TeX(r"($P(y_k|x_k)$)"), xlab = "X", ylab = "Y"))
+# with(df, points(x, 1/fitted(m2a), col = "red"))
+# 
+# with(df, plot(x, 1/p2, main = TeX(r"($P(y_k|x_k, x_k)$)"), xlab = "X", ylab = "Y"))
+# with(df, points(x, 1/fitted(m2b), col = "red"))
+# 
+# with(df, plot(x, 1/p2, main = TeX(r"($P(y_k|x_k)$)"), xlab = "X", ylab = "Y"))
+# with(df, points(x, 1/fitted(m3a), col = "red"))
+# 
+# with(df, plot(x, 1/p2, main = TeX(r"($P(y_k|x_k, x_k)$)"), xlab = "X", ylab = "Y"))
+# with(df, points(x, 1/fitted(m3b), col = "red"))
+# dev.off()
