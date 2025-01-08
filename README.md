@@ -1,10 +1,10 @@
 # Repository for the paper "Quantile balancing inverse probability weighting for non-probability samples"
 
-## Working paper
+## Paper
 
-[Arxiv version](https://arxiv.org/abs/2403.09726)
-
-[Here](paper/paper-nonprob-qcal.pdf) is the lastest version of the paper.
++ Accepted to Survey Methodology journal (planned for December 2025).
++ [Arxiv version](https://arxiv.org/abs/2403.09726)
++ Lastest version [here](paper/paper-nonprob-qcal.pdf).
 
 ## Requirements
 
