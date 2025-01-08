@@ -4,7 +4,7 @@
 
 + Accepted to Survey Methodology journal (planned for December 2025).
 + [Arxiv version](https://arxiv.org/abs/2403.09726)
-+ Lastest version [here](paper/paper-nonprob-qcal.pdf).
++ Latest version [here](paper/paper-nonprob-qcal.pdf).
 
 ## Requirements
 
