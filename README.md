@@ -41,3 +41,9 @@ Structure of the repo:
 ## Financing
 
 Work on this paper was supported by the National Science Centre, OPUS 20 grant no. 2020/39/B/HS4/00941.
+
+## License
+
+- Code in `codes/` is licensed under the MIT License (see `LICENSE`).
+- Publication/content artifacts in `paper/`, `figs/`, and `results/` are not covered by MIT and are governed by applicable content rights and permissions (see `LICENSE-content`).
+- For Statistics Canada publication terms referenced for content reuse, see: https://www150.statcan.gc.ca/n1/pub/12-001-x/2025002/article/00005-eng.htm
