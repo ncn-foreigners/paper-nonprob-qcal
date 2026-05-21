@@ -41,3 +41,8 @@ Structure of the repo:
 ## Financing
 
 Work on this paper was supported by the National Science Centre, OPUS 20 grant no. 2020/39/B/HS4/00941.
+
+## License
+
+- This repository is licensed under Creative Commons Attribution 4.0 International (CC BY 4.0). See `LICENSE`.
+- Scope and third-party-material note: see `LICENSE-content`.
