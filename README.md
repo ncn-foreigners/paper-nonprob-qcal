@@ -2,9 +2,8 @@
 
 ## Paper
 
-+ Accepted to Survey Methodology journal (planned for December 2025).
++ Paper: Beręsewicz, M., Szymkowiak, M. and Chlebicki, P. (2025). Quantile balancing inverse probability weighting for non-probability samples. Survey Methodology, 51(2), 533-559. Paper available at http://www.statcan.gc.ca/pub/12-001-x/2025002/article/00005-eng.pdf.
 + [Arxiv version](https://arxiv.org/abs/2403.09726)
-+ Latest version [here](paper/paper-nonprob-qcal.pdf).
 
 ## Requirements
 
