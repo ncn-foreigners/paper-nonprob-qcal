@@ -44,6 +44,5 @@ Work on this paper was supported by the National Science Centre, OPUS 20 grant n
 
 ## License
 
-- Code in `codes/` is licensed under the MIT License (see `LICENSE`).
-- Publication/content artifacts in `paper/`, `figs/`, and `results/` are not covered by MIT and are governed by applicable content rights and permissions (see `LICENSE-content`).
-- For Statistics Canada publication terms referenced for content reuse, see: https://www150.statcan.gc.ca/n1/pub/12-001-x/2025002/article/00005-eng.htm
+- This repository is licensed under Creative Commons Attribution 4.0 International (CC BY 4.0). See `LICENSE`.
+- Scope and third-party-material note: see `LICENSE-content`.
